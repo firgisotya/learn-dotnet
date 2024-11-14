@@ -8,7 +8,6 @@ namespace learn.Repositories
     {
         Task<IEnumerable<User>> GetAll();
         Task<User> GetById(int id);
-        Task<User> GetByUsername(string username);
         Task<User> GetByEmail(string email);
         Task Create(User user);
         Task Update(User user);
@@ -38,12 +37,6 @@ namespace learn.Repositories
             return await connection.QuerySingleOrDefaultAsync<User>(sql, new { id });
         }
 
-        public async Task<User> GetByUsername(string username)
-        {
-            using var connection = _context.CreateConnection();
-            var sql = "SELECT * FROM users WHERE username = @username";
-            return await connection.QuerySingleOrDefaultAsync<User>(sql, new { username });
-        }
 
         public async Task<User> GetByEmail(string email)
         {

@@ -5,12 +5,12 @@ namespace learn.Models.Product
     public class CreateRequest
     {
         [Required]
-        public string? name { get; set; }
+        public string? Name { get; set; }
 
         [Required]
-        public string? description { get; set; }
+        public string? Description { get; set; }
 
         [Required]
-        public decimal price { get; set; }
+        public decimal Price { get; set; }
     }
 }
