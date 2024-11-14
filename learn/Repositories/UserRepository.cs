@@ -1,12 +1,71 @@
-﻿namespace learn.Repositories
-{
-    public class UserRepository
-    {
+﻿using Dapper;
+using learn.Entities;
+using learn.Helpers;
 
+namespace learn.Repositories
+{
+    public interface IUserRepository
+    {
+        
     }
 
-    public class UserRep : IUserRepository
+    public class UserRepository : IUserRepository
     {
         private DataContext _context;
+
+        public UserRepository(DataContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<IEnumerable<User>> GetAll()
+        {
+            using var connection = _context.CreateConnection();
+            var sql = "SELECT * FROM users";
+            return await connection.QueryAsync<User>(sql);
+        }
+
+        public async Task<User> GetById(int id)
+        {
+            using var connection = _context.CreateConnection();
+            var sql = "SELECT * FROM users WHERE id = @id";
+            return await connection.QuerySingleOrDefaultAsync<User>(sql, new { id });
+        }
+
+        public async Task<User> GetByUsername(string username)
+        {
+            using var connection = _context.CreateConnection();
+            var sql = "SELECT * FROM users WHERE username = @username";
+            return await connection.QuerySingleOrDefaultAsync<User>(sql, new { username });
+        }
+
+        public async Task<User> GetByEmail(string email)
+        {
+            using var connection = _context.CreateConnection();
+            var sql = "SELECT * FROM users WHERE email = @email";
+            return await connection.QuerySingleOrDefaultAsync<User>(sql, new { email });
+        }
+
+        public async Task Create(User user)
+        {
+            using var connection = _context.CreateConnection();
+            var sql = @"INSERT INTO users (fullname, username, email, password, role) VALUES (@fullname, @username, @email, @password, @role)";
+            await connection.ExecuteAsync(sql, user);
+        }
+
+        public async Task Update(User user)
+        {
+            using var connection = _context.CreateConnection();
+            var sql = @"UPDATE users SET fullname = @fullname, username = @username, email = @email,  role = @role WHERE id = @id";
+            await connection.ExecuteAsync(sql, user);
+        }
+
+        public async Task Delete(int id)
+        {
+            using var connection = _context.CreateConnection();
+            var sql = "DELETE FROM users WHERE id = @id";
+            await connection.ExecuteAsync(sql, new { id });
+        }
     }
+
 }
