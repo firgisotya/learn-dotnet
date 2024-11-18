@@ -103,8 +103,8 @@ namespace learn.Helpers
 
             // Seed Users with hashed passwords
             var userSql = @"INSERT INTO `users` (Fullname, Username, Email, Password, Role) VALUES
-                            ('Admin', 'admin', 'admin@example.com', @Password, 0),
-                            ('User', 'user', 'user@example.com', @Password, 1);";
+                            ('Admin', 'admin', 'admin@mail.com', @Password, 0),
+                            ('User', 'user', 'user@mail.com', @Password, 1);";
             await connection.ExecuteAsync(userSql, new { Password = hashedPassword });
 
 
